@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.portfolio.board.Mapper.UserMapper">
+
+    <insert id="save" parameterType="UserDTO">
+        INSERT INTO users (id, user_email, user_pw, user_phone, user_name, user_birth)
+        VALUES (
+                   user_seq.NEXTVAL,
+                   #{userEmail, jdbcType=VARCHAR},
+                   #{userPW, jdbcType=VARCHAR},
+                   #{userPhone, jdbcType=VARCHAR},
+                   #{userName, jdbcType=VARCHAR},
+                   #{userBirth, jdbcType=VARCHAR}
+               )
+    </insert>
+
+    <select id="findByUserEmail" parameterType="string" resultType="UserDTO">
+        SELECT id, user_email, user_pw, user_phone, user_name, user_birth
+        FROM users
+        WHERE user_email = #{userEmail, jdbcType=VARCHAR}
+    </select>
+
+    <select id="existsByUserEmail" parameterType="string" resultType="boolean">
+        SELECT
+            CASE
+                WHEN COUNT(1) > 0 THEN 1
+                ELSE 0
+                END
+        FROM users
+        WHERE user_email = #{userEmail, jdbcType=VARCHAR}
+    </select>
+
+</mapper>

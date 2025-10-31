@@ -60,14 +60,23 @@ document.addEventListener('DOMContentLoaded', function() {
     // phoneLast.oninput = validatePhonePart;
 
     form.addEventListener('submit', function(event) {
+        var isEmailVerified = document.getElementById('emailVerified').value;
+        if (isEmailVerified !== 'true') {
+            alert('이메일 인증을 완료해주세요.');
+            event.preventDefault(); // 폼 전송 중단
+            return false;
+        }
+
         if (phoneMiddle.value.length > 4 || phoneLast.value.length > 4) {
             event.preventDefault();
             alert('전화번호에 오류가 발생했습니다.');
             return false;
         }
+
         if(password.value !== confirmPassword.value) {
-            e.preventDefault();
-            alert('비밀번호가 서로 일치하지 않습니다.')
+            event.preventDefault();
+            alert('비밀번호가 서로 일치하지 않습니다.');
+            return false;
         }
     });
 

@@ -39,14 +39,28 @@ public class UsersController {
                        @RequestParam("phoneMiddle") String phoneMiddle,
                        @RequestParam("phoneLast") String phoneLast,
                        RedirectAttributes redirectAttributes) {
+        //이메일 비어있는지 확인
+        if (userDTO.getUserEmail() == null || userDTO.getUserEmail().trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("emailError", "이메일을 입력해주세요.");
+            redirectAttributes.addFlashAttribute("userDTO", userDTO);
+            return "redirect:/users/register";
+        }
+        //비밀번호가 비어있는지 확인
+        if (userDTO.getUserPW() == null || userDTO.getUserPW().trim().isEmpty()) {
+            redirectAttributes.addFlashAttribute("pwError", "비밀번호를 입력해주세요.");
+            redirectAttributes.addFlashAttribute("userDTO", userDTO);
+            return "redirect:/users/register";
+        }
+        //이메일 중복 확인
         if (userService.isEmailExists(userDTO.getUserEmail())) {
             userDTO.setUserEmail(""); // 이메일 필드만 초기화
             redirectAttributes.addFlashAttribute("emailExists", true);
             redirectAttributes.addFlashAttribute("userDTO", userDTO); // 변경된 userDTO 전달
             return "redirect:/users/register";
         }
+
         userService.save(userDTO, phonePrefix, phoneMiddle, phoneLast);
-        return "redirect:/users/login";
+        return "redirect:/"; // 회원가입 성공 시 메인 페이지로
     }
 
     @PostMapping("/login")

@@ -25,19 +25,24 @@ repositories {
 dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-web'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
-    runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // ▼▼▼ [주석 처리 또는 삭제] JPA와 MySQL ▼▼▼
+    // implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // runtimeOnly 'com.mysql:mysql-connector-j'
+
+    // Gmail SMTP (그대로 둡니다)
+    implementation 'org.springframework.boot:spring-boot-starter-mail'
+    implementation 'javax.mail:javax.mail-api:1.6.2'
+
+    // ▼▼▼ [추가하신 내용 - 올바른 설정입니다] mybatis ▼▼▼
+    implementation 'org.mybatis.spring.boot:mybatis-spring-boot-starter:3.0.3'
+    // ▼▼▼ [추가하신 내용 - 올바른 설정입니다] Oracle ▼▼▼
+    runtimeOnly 'com.oracle.database.jdbc:ojdbc11'
+
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
     providedRuntime 'org.springframework.boot:spring-boot-starter-tomcat'
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
-    //사용자 비밀번호 security 라이브러리
-//    implementation 'org.springframework.boot:spring-boot-starter-security'
-    //Gmail SMTP 인증
-    implementation 'org.springframework.boot:spring-boot-starter-mail'
-    implementation 'javax.mail:javax.mail-api:1.6.2'
-//    implementation group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
-//    implementation 'org.slf4j:slf4j-api:1.7.32'
 }
 
 tasks.named('test') {

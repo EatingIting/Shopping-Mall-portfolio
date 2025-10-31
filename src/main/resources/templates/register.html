@@ -18,6 +18,8 @@
 <body>
 <div class="container">
     <form id="registrationForm" action="/users/register" method="post" class="mt-4">
+
+        <input type="hidden" id="emailVerified" name="emailVerified" value="false">
         <div class="form-group">
             <label for="userName">회원 이름</label>
             <input type="text" class="form-control" id="userName" name="userName" th:value="${userDTO?.userName}" required>

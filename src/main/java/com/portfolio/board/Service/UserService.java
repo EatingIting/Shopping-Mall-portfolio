@@ -2,11 +2,8 @@ package com.portfolio.board.Service;
 
 
 import com.portfolio.board.DTO.UserDTO;
-import com.portfolio.board.Entity.UserEntity;
-import com.portfolio.board.Repository.UserRepository;
-import jakarta.transaction.Transactional;
+import com.portfolio.board.Mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
-import java.util.Optional;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -14,28 +11,25 @@ import org.springframework.stereotype.Service;
 @Service
 @RequiredArgsConstructor
 @Slf4j
-@Transactional
 public class UserService {
-    private final UserRepository userRepository;
+
+    private final UserMapper userMapper;
 
     public void save(UserDTO userDTO, String phonePrefix, String phoneMiddle, String phoneLast) {
         // 전화번호 조합
         String formattedPhone = String.format("%s-%s-%s", phonePrefix, phoneMiddle, phoneLast);
         userDTO.setUserPhone(formattedPhone);
 
-        UserEntity userEntity = UserEntity.toUserEntity(userDTO);
-        userRepository.save(userEntity);
+        userMapper.save(userDTO);
     }
 
     public UserDTO login(UserDTO userDTO) {
-        Optional<UserEntity> byUserEmail = userRepository.findByUserEmail(userDTO.getUserEmail());
-        if(byUserEmail.isPresent()){
+        UserDTO userDTOFromDB = userMapper.findByUserEmail(userDTO.getUserEmail());
+        if(userDTOFromDB != null){
             //해당 이메일을 가진 회원 정보가 있음.
-            UserEntity userEntity = byUserEmail.get();
-            if(userEntity.getUserPW().equals(userDTO.getUserPW())) {
+            if(userDTOFromDB.getUserPW().equals(userDTO.getUserPW())) {
                 //이메일 있고, 비밀번호 일치
-                UserDTO dto = UserDTO.toUserDTO(userEntity);
-                return dto;
+                return userDTOFromDB;
             } else {
                 //이메일 있지만, 비밀번호 불일치
                 return null;
@@ -46,12 +40,10 @@ public class UserService {
         }
     }
     public boolean isEmailExists(String email) {
-        return userRepository.existsByUserEmail(email);
+        return userMapper.existsByUserEmail(email);
     }
 
     public UserDTO autoLogin(String userEmail) {
-        Optional<UserEntity> userEntityOptional = userRepository.findByUserEmail(userEmail);
-        return userEntityOptional.map(UserDTO::toUserDTO).orElse(null);
+        return userMapper.findByUserEmail(userEmail); // Mapper가 DTO를 바로 반환
     }
-
 }

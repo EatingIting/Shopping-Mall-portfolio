@@ -35,9 +35,9 @@ document.addEventListener('DOMContentLoaded', function() {
                     container.innerText = '인증 이메일이 전송되었습니다. 이메일을 확인해주세요.';
                     container.style.color = 'green';
                     showVerificationInput();
-                    startTimer(); // 타이머 시작
-                    document.getElementById('emailAuthBtn').style.display = 'none'; // 이메일 인증 버튼 숨기기
-                    document.getElementById('userEmail').disabled = true; // 이메일 입력칸 비활성화
+                    startTimer();
+                    document.getElementById('emailAuthBtn').style.display = 'none';
+                    document.getElementById('userEmail').readOnly = true; // <-- 'readOnly'로 수정
                 }
             })
             .catch(error => {
@@ -88,9 +88,11 @@ function verifyCode() {
             // 인증 성공 시
             container.style.display = 'block';
             container.innerHTML = '<p class="text-success">인증이 완료되었습니다.</p>';
-            document.getElementById('verificationInput').style.display = 'none'; // 인증번호 입력란 숨기기
-            clearInterval(timerId); // 타이머 멈춤
-            document.getElementById('timerContainer').style.display = 'none'; // 타이머 숨기기
+            document.getElementById('verificationInput').style.display = 'none';
+            clearInterval(timerId);
+            document.getElementById('timerContainer').style.display = 'none';
+
+            document.getElementById('emailVerified').value = 'true';
         })
         .catch(errorMessage => {
             // 인증 실패 시
