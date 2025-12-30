@@ -5,25 +5,10 @@ server:
       tracking-modes: cookie
 
 spring:
-  # ▼▼▼ [제거 또는 주석 처리] JPA 관련 설정 ▼▼▼
-  # jpa:
-  #   database-platform: org.hibernate.dialect.MySQL8Dialect
-  #   open-in-view: false
-  #   show-sql: true
-  #   hibernate:
-  #     ddl-auto: update
-
   thymeleaf:
     cache: false
 
-  # ▼▼▼ [제거 또는 주석 처리] H2 (사용하지 않는 경우) ▼▼▼
-  # h2:
-  #   console:
-  #     enabled: false
-
-  # ▼▼▼ [변경] Oracle Datasource 설정 ▼▼▼
   datasource:
-    # (학원 DB 정보에 맞게 IP, 포트, SID, 계정, 비밀번호를 수정하세요)
     url: jdbc:oracle:thin:@localhost:1521/XEPDB1
     username: portfolio_user
     password: portfolio
@@ -32,19 +17,12 @@ spring:
   profiles:
     include: info
 
-# ▼▼▼ [추가] Mybatis 설정 ▼▼▼
 mybatis:
-  # 1. Mapper XML 파일 위치
-  # (src/main/resources/mappers/ 폴더 안에 *.xml 파일을 둘 예정)
   mapper-locations: classpath:mappers/**/*.xml
-
-  # 2. DTO 별칭 (UserDTO 패키지 경로)
   type-aliases-package: com.portfolio.board.DTO
-
-  # 3. (권장) Oracle DB의 USER_NAME을 DTO의 userName으로 자동 매핑
   configuration:
     map-underscore-to-camel-case: true
 
 logging:
   level:
-    org.springframework.security: DEBUG # (이 부분은 DB와 무관하므로 그대로 둡니다)
+    org.springframework.security: DEBUG
