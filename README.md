@@ -163,13 +163,37 @@ IT Portfolio Mall은 기본적인 쇼핑몰 UI를 바탕으로
 ---
 
 ### MyBatis Mapper
-```java
-    @Mapper
-    public interface UserMapper {
-        void save(UserDTO userDTO);
-        UserDTO findByUserEmail(String email);
-        boolean existsByUserEmail(String userEmail);
-    }
+```xml
+<mapper namespace="com.portfolio.board.Mapper.UserMapper">
+
+    <insert id="save" parameterType="UserDTO">
+        INSERT INTO users (id, user_email, user_pw, user_phone, user_name, user_birth)
+        VALUES (
+        user_seq.NEXTVAL,
+        #{userEmail, jdbcType=VARCHAR},
+        #{userPW, jdbcType=VARCHAR},
+        #{userPhone, jdbcType=VARCHAR},
+        #{userName, jdbcType=VARCHAR},
+        #{userBirth, jdbcType=VARCHAR}
+        )
+    </insert>
+
+    <select id="findByUserEmail" parameterType="string" resultType="UserDTO">
+        SELECT id, user_email, user_pw, user_phone, user_name, user_birth
+        FROM users
+        WHERE user_email = #{userEmail, jdbcType=VARCHAR}
+    </select>
+
+    <select id="existsByUserEmail" parameterType="string" resultType="boolean">
+        SELECT
+        CASE
+        WHEN COUNT(1) > 0 THEN 1
+        ELSE 0
+        END
+        FROM users
+        WHERE user_email = #{userEmail, jdbcType=VARCHAR}
+    </select>
+</mapper>
 ```
 ---
 
